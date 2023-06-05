@@ -16,7 +16,7 @@ const matchSVGSprite = /assets\/icons\/|components\/Base\/Icon\/icons\//;
 
 const es6modules = ['query-string', 'split-on-first', 'strict-uri-encode', 'array-move', '@shuwen/oss-store', 'debug', 'dom-serializer', 'pinyin'];
 
-const createCssLoaders = (isLess, isDev, isMagicUI) => { // true isDec true
+const createCssLoaders = (isLess, isDev) => { // true isDec true
     const styleLoader = isDev ? 'style-loader' : MiniCssExtractPlugin.loader;
 
     if (isLess) {
@@ -26,7 +26,7 @@ const createCssLoaders = (isLess, isDev, isMagicUI) => { // true isDec true
                 loader: 'css-loader',
                 options: {
                     modules: true,
-                    localIdentName: isMagicUI ? '[local]' : '[local]-[hash:base64:6]',
+                    localIdentName: '[local]',
                     // getLocalIdent: (context, localIdentName, localName, options) => {
                     //   if (localName.includes('ant-dropdown')) {
                     //     console.log(context);
@@ -61,13 +61,12 @@ const createCssLoaders = (isLess, isDev, isMagicUI) => { // true isDec true
 
 module.exports = (env, argv) => {
     const isDev = argv.mode === 'development';
-    const { ESLINT_LOADER_DISABLED, IS_REAL_PROD } = process.env; // 通过环境变量禁用 eslint-loader
-    let publicPath = '';
+    // const {  IS_REAL_PROD } = process.env; // 通过环境变量禁用 eslint-loader
+    let publicPath = '/';
     if (isDev) {
         publicPath = '/';
-    } else if (IS_REAL_PROD) {
-        publicPath = `//s.newscdn.cn/${name}/${version}/`;
     }
+
 
     return {
         entry: {
@@ -80,13 +79,14 @@ module.exports = (env, argv) => {
             chunkFilename: '[name].bundle.js',
             publicPath,
         },
-
+        cache: {
+            type: 'filesystem',
+        },
         module: {
             rules: [
                 {
                     test: /\.jsx?$/,
                     use: [
-                        isDev ? 'cache-loader' : null,
                         'thread-loader',
                         {
                             loader: 'babel-loader',
@@ -114,30 +114,18 @@ module.exports = (env, argv) => {
                                         },
                                     ],
                                     '@babel/plugin-proposal-optional-chaining',
-                                    // ['import', {
-                                    //   libraryName: 'antd',
-                                    //   libraryDirectory: 'es',
-                                    //   style: 'css',
-                                    // }],
-                                    // ['import', {
-                                    //   libraryName: 'lodash',
-                                    //   libraryDirectory: '',
-                                    //   camel2DashComponentName: false,
-                                    // }, 'lodash'],
-                                    // 'dva-hmr', // TODO
                                 ],
                                 cacheDirectory: true,
                                 cacheCompression: false,
                             },
                         },
-                        ...(isDev && !ESLINT_LOADER_DISABLED ? ['eslint-loader'] : []),
+                        ...(isDev ? ['eslint-loader'] : []),
                     ].filter(Boolean),
                     exclude: [new RegExp(`node_modules/(?!(${es6modules.join('|')})/).*`)],
                 },
                 {
                     test: /\.tsx?/,
                     use: [
-                        isDev ? 'cache-loader' : null,
                         {
                             loader: 'thread-loader',
                             options: {
@@ -185,13 +173,8 @@ module.exports = (env, argv) => {
                     ],
                 },
                 {
-                    test: /(magic-ui|magic-theme-color)\/.*\.less$/,
-                    use: createCssLoaders(true, isDev, true),
-                },
-                {
                     test: /\.less$/,
-                    exclude: /(magic-ui|magic-theme-color)\/.*\.less$/,
-                    use: createCssLoaders(true, isDev, false),
+                    use: createCssLoaders(true, isDev),
                 },
                 {
                     test: /\.css$/,
@@ -322,3 +305,5 @@ module.exports = (env, argv) => {
         },
     };
 };
+
+
