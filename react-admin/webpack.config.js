@@ -28,21 +28,12 @@ const createCssLoaders = (isLess, isDev) => { // true isDec true
                 options: {
                     modules: true,
                     localIdentName: '[local]',
-                    // getLocalIdent: (context, localIdentName, localName, options) => {
-                    //   if (localName.includes('ant-dropdown')) {
-                    //     console.log(context);
-                    //   }
-                    //   return `${localName}${getLocalIdent(context, localIdentName, localName, options)}`;
-                    // },
                 },
             },
             'postcss-loader',
             {
                 loader: 'less-loader',
                 options: {
-                    // modifyVars: {
-                    //     // 'ant-prefix': 'ant-host'
-                    // },
                     javascriptEnabled: true,
                 },
             },
@@ -62,18 +53,14 @@ const createCssLoaders = (isLess, isDev) => { // true isDec true
 
 module.exports = (env, argv) => {
     const isDev = argv.mode === 'development';
-    // const {  IS_REAL_PROD } = process.env; // 通过环境变量禁用 eslint-loader
     let publicPath = '/';
     if (isDev) {
         publicPath = '/';
     }
-
-
     return {
         entry: {
             index: [path.resolve(__dirname, 'src/index.ts')],
         },
-
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: '[name].js',
@@ -130,7 +117,6 @@ module.exports = (env, argv) => {
                         {
                             loader: 'thread-loader',
                             options: {
-                                // there should be 1 cpu for the fork-ts-checker-webpack-plugin
                                 worker: os.cpus().length - 1,
                             },
                         },
@@ -278,8 +264,6 @@ module.exports = (env, argv) => {
             },
         },
 
-        // 开发环境 eval 的速度最快，调试比较准确（实际运行的代码和 devtool 看到的一致，不容易出现断点打不上的问题）
-        // 生产环境 sourcemap 只包含文件名和行信息
         devtool: isDev ? 'inline-source-map' : 'nosources-source-map',
 
         stats: {
