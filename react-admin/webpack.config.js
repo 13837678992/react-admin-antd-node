@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');// 将 CSS 提�
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // Webpack插件，用于优化\最小化CSS资产
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin'); // 在单独的进程上运行类型脚本类型检查器和linter。
 const TerserPlugin = require('terser-webpack-plugin'); // 此插件使用terser来最小化/最小化您的JavaScript。
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const os = require('os');
 
 const { name, version } = require('./package.json');
@@ -208,20 +209,15 @@ module.exports = (env, argv) => {
 
         plugins: [
             new ForkTsCheckerWebpackPlugin({
-                checkSyntacticErrors: true,
+                typescript: {
+                    diagnosticOptions: {
+                        semantic: true,
+                        syntactic: true,
+                    },
                 async: false,
-            }),
+            }}),
             new CaseSensitivePathsPlugin(),
-
             new SpriteLoaderPlugin(),
-            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-            //   ...(isDev ? [] : [
-            //     new MiniCssExtractPlugin({
-            //       // filename: '[name].css',
-            //       // chunkFilename: '[id].css',
-            //     }),
-            //     new OptimizeCSSAssetsPlugin(),
-            //   ]),
             ...(isDev
                 ? []
                 : [
@@ -231,19 +227,13 @@ module.exports = (env, argv) => {
                     }),
                     new OptimizeCSSAssetsPlugin(),
                 ]),
-
-            // new webpack.DllReferencePlugin({
-            //     manifest: isDev ? manifestDev : manifest,
-            // }),
-            // new BundleAnalyzerPlugin(),
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || argv.mode),
                 'process.env.TYPE': JSON.stringify(process.env.type || argv.type),
             }),
             new HtmlWebpackPlugin({
                 filename: 'index.html',
-                template: path.resolve(__dirname, './src/index.ejs'),
-                // chunksSortMode: 'none',
+                template: path.resolve(__dirname, './src/index.html'),
                 publicPath,
             }),
         ],
@@ -258,40 +248,33 @@ module.exports = (env, argv) => {
                 components: path.resolve(__dirname, 'src/components/'),
                 services: path.resolve(__dirname, 'src/services/'),
                 utils: path.resolve(__dirname, 'src/utils/'),
-                '@magicUI': path.resolve(__dirname, 'src/magicUI/'),
             },
         },
 
         devServer: {
+            static: {
+                directory: path.join(__dirname, 'public'),
+            },
+            compress: true,
             port: 8031,
-            disableHostCheck: true,
-            historyApiFallback: true,
+            historyApiFallback: {
+                rewrites: [
+                    { from: /^\/$/, to: '/src/landing.html' },
+                ],
+            },
             host: '0.0.0.0',
             headers: {
                 'Access-Control-Allow-Origin': '*',
             },
             proxy: {
               '/api': {
-                target: 'http://l.tyucr7q.asia:8030',
+                target: 'http://tyucr7q.asia:8030',
                 changeOrigin: true,
               },
             },
-            stats: {
-                colors: true,
-                hash: false,
-                version: false,
-                timings: true,
-                assets: false,
-                chunks: false,
-                modules: false,
-                reasons: false,
-                children: false,
-                source: false,
-                errors: true,
-                errorDetails: false,
-                warnings: true,
-                publicPath: false,
-                warningsFilter: /export .* was not found in/,
+            client: {
+                overlay: false,
+                progress: true,
             },
         },
 
