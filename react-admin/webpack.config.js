@@ -9,7 +9,9 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'); /
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin'); // 在单独的进程上运行类型脚本类型检查器和linter。
 const TerserPlugin = require('terser-webpack-plugin'); // 此插件使用terser来最小化/最小化您的JavaScript。
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const os = require('os');
+
 
 const { name, version } = require('./package.json');
 
@@ -59,7 +61,7 @@ module.exports = (env, argv) => {
     }
     return {
         entry: {
-            index: [path.resolve(__dirname, 'src/index.ts')],
+            index: [path.resolve(__dirname, 'src/index.js')],
         },
         output: {
             path: path.resolve(__dirname, 'build'),
@@ -75,7 +77,12 @@ module.exports = (env, argv) => {
                 {
                     test: /\.jsx?$/,
                     use: [
-                        'thread-loader',
+                        {
+                            loader: 'thread-loader',
+                            options: {
+                                worker: os.cpus().length - 1,
+                            },
+                        },
                         {
                             loader: 'babel-loader',
                             options: {
@@ -107,7 +114,6 @@ module.exports = (env, argv) => {
                                 cacheCompression: false,
                             },
                         },
-                        ...(isDev ? ['eslint-loader'] : []),
                     ].filter(Boolean),
                     exclude: [new RegExp(`node_modules/(?!(${es6modules.join('|')})/).*`)],
                 },
@@ -205,7 +211,9 @@ module.exports = (env, argv) => {
             new CaseSensitivePathsPlugin(),
             new SpriteLoaderPlugin(),
             ...(isDev
-                ? []
+                ? [
+                    new ESLintPlugin()
+                ]
                 : [
                     new MiniCssExtractPlugin({
                         // filename: '[name].css',
@@ -222,6 +230,7 @@ module.exports = (env, argv) => {
                 template: path.resolve(__dirname, './src/index.html'),
                 publicPath,
             }),
+
         ],
 
         externals: {},
