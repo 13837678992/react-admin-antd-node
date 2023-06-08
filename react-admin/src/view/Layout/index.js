@@ -1,5 +1,6 @@
-
-function Layout() {
+import React from 'react';
+function  Layout() {
+    console.log('Layout')
     return (
         <div>
             <h1>Layout</h1>

@@ -1,4 +1,4 @@
-import {login} from "@/routers/login";
+import login from "./login";
 export  default [
     ...login
 ]
