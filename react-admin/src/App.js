@@ -5,37 +5,34 @@ import zhCN from 'antd/locale/zh_CN';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import routers from "@/routers";
-const NotFound = React.lazy(() => import('@/view/NotFound'));
-const Layout = React.lazy(() => import('@/view/Layout').catch(error => {
-    console.error("Failed to load Layout component", error);
-    throw error;
-}));
-const Login = React.lazy(() => import('@/view/login').catch(error => {
-    console.error("Failed to load Layout component", error);
-    throw error;
-}));
-function App ()  {
-    return (
-        <ConfigProvider locale={zhCN}>
-          <DndProvider backend={HTML5Backend}>
-            <Router>
-                <Suspense fallback={<div>Loading...</div>}>
-                <Routes>
-                    {
-                            routers.map(({ path,exact, Component }, key) => (
-                                <Route
-                                    path={path}
-                                    key={key}
-                                    element={<Component/>}
+import 'antd/dist/reset.css';
 
-                                />
-                            ))
-                    }
-                </Routes>
-                </Suspense>
-            </Router>
-             </DndProvider>
-        </ConfigProvider>
+function App ()  {
+
+    const generateRoutes = (routes) => {
+        return routes.map((route, index) => {
+            const { path, component: Component, children } = route;
+            return (
+                <Route key={index} path={path} element={<Component />}>
+                    {children && generateRoutes(children)}
+                </Route>
+            );
+        });
+    };
+    return (
+
+            <ConfigProvider locale={zhCN}>
+                <DndProvider backend={HTML5Backend}>
+                    <Router>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Routes>
+                                {generateRoutes(routers)}
+                            </Routes>
+                        </Suspense>
+                    </Router>
+                </DndProvider>
+            </ConfigProvider>
+
     );
 }
 
