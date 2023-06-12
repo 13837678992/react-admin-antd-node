@@ -6,7 +6,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import routers from "@/routers";
 import 'antd/dist/reset.css';
-
 function App ()  {
 
     const generateRoutes = (routes) => {
@@ -20,7 +19,6 @@ function App ()  {
         });
     };
     return (
-
             <ConfigProvider locale={zhCN}>
                 <DndProvider backend={HTML5Backend}>
                     <Router>
@@ -32,11 +30,7 @@ function App ()  {
                     </Router>
                 </DndProvider>
             </ConfigProvider>
-
     );
 }
-
-
-
 
 export default App;

@@ -1,6 +1,6 @@
 import { createStore } from 'redux';
-import rootReducer from './reducers'; // 导入根Reducer
-
-const store = createStore(rootReducer); // 创建Redux store
-
+import rootReducer, {persistedReducer} from './reducers'; // 导入根Reducer
+import { persistStore } from 'redux-persist';
+const store = createStore(persistedReducer); // 创建Redux store
 export default store;
+export const persistor = persistStore(store);
