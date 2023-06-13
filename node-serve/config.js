@@ -2,8 +2,8 @@ module.exports = {  // mysql 配置
   mysql: {
     host: 'localhost',
     user: 'root',
-    password: '',
-    database: 'test' // test库
+    password: '@DZHyys1005',
+    database: 'coderhub' // test库
   },
-  port: 3001
+  port: 8030
 }

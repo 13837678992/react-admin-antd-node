@@ -38,6 +38,7 @@ router.post('/signIn',async (ctx, next) => {
       }
     }
   }).catch((err) => {
+    console.log(err)
     ctx.body = {
       state: 0,
       msg: err,

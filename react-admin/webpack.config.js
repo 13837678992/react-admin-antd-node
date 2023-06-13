@@ -21,7 +21,7 @@ const es6modules = ['query-string', 'split-on-first', 'strict-uri-encode', 'arra
 
 const createCssLoaders = (isLess, isDev) => { // true isDec true
     const styleLoader = isDev ? 'style-loader' : MiniCssExtractPlugin.loader;
-
+    console.log(isDev,'isDev')
     if (isLess) {
         return [
             styleLoader,
