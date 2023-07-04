@@ -56,16 +56,17 @@ function  LayoutIndex() {
     };
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div className="demo-logo-vertical" />
-                <Menu onClick={onClick} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
-            </Sider>
+            <Header className="site-layout-background" style={{ padding: 0, display: 'flex', justifyContent: 'flex-end', paddingRight: 20 ,alignItems: 'center'}}>
+                <Dropdown menu={ {items:menu} }  placement="bottomRight">
+                    <Avatar icon={<UserOutlined />}/>
+                </Dropdown>
+            </Header>
+
             <Layout className="site-layout">
-                <Header className="site-layout-background" style={{ padding: 0, display: 'flex', justifyContent: 'flex-end', paddingRight: 20 ,alignItems: 'center'}}>
-                    <Dropdown menu={ {items:menu} }  placement="bottomRight">
-                        <Avatar icon={<UserOutlined />}/>
-                    </Dropdown>
-                </Header>
+                <Sider collapsible  collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                    {/*<div className="demo-logo-vertical" />*/}
+                    <Menu onClick={onClick} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+                </Sider>
                 <Content style={{ margin: '0 16px' }}>
                     <Outlet />
                 </Content>

@@ -3,7 +3,7 @@ import React, { useState,useEffect } from 'react';
 
 import {Form, Input, Button, Checkbox, Card} from 'antd';
 import {useSelector, useDispatch, connect} from 'react-redux';
-import { login } from 'actions/authActions';
+import { login } from '@/actions/authActions';
 import {useLocation, useNavigate} from "react-router-dom";
 const Login = ({login}) => {
     const isAuthenticated = useSelector(state => state?.auth?.isAuthenticated);

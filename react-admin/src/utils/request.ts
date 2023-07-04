@@ -1,10 +1,9 @@
 import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
 import {useDispatch, useSelector} from "react-redux";
-import {logout} from "actions/authAction";
-
+import {logout} from "@actions/authActions";
 const dispatch = useDispatch()
-const isAuthenticated:Boolean = useSelector(state => state.auth.isAuthenticated);
+const isAuthenticated:Boolean = useSelector((state:any)  => state.auth.isAuthenticated);
 export type IRequestMethod = 'GET' | 'PUT' | 'POST' | 'DELETE';
 export interface ICheckStatusProps {
     response: Response;
@@ -102,7 +101,7 @@ export default function request(_url: string, options?: any): FetchResult {
             options: options,
             url: _url,
         }))
-        .then(response => {response.json()})
+        .then(response => response.json())
         .then(data => {
             const { code } = data;
             if (code === 'SYSTEM_ERROR') {

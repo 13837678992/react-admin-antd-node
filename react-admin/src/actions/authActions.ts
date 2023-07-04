@@ -1,4 +1,4 @@
-export const login = (username, password) => {
+export const login = (username:string, password:string ) => {
     // 在这里执行登录操作，例如调用登录API
     return {
         type: 'LOGIN',

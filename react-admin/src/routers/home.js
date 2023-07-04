@@ -10,8 +10,8 @@ export  default [
     },
     {
         title: '产品1',
-        path:'/products1',
-        component: lazy( () => import( `@/view/Products` ) ),
+        path:'/Live2D',
+        component: lazy( () => import( `@/view/Products/Live2D` ) ),
         icon: <PieChartOutlined />,
     }
 ]

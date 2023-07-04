@@ -8,7 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');// 将 CSS 提�
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // Webpack插件，用于优化\最小化CSS资产
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin'); // 在单独的进程上运行类型脚本类型检查器和linter。
 const TerserPlugin = require('terser-webpack-plugin'); // 此插件使用terser来最小化/最小化您的JavaScript。
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const CopyWebpackPlugin = require('copy-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const os = require('os');
 
@@ -17,7 +17,7 @@ const { name, version } = require('./package.json');
 
 const matchSVGSprite = /assets\/icons\/|components\/Base\/Icon\/icons\//;
 
-const es6modules = ['query-string', 'split-on-first', 'strict-uri-encode', 'array-move', '@shuwen/oss-store', 'debug', 'dom-serializer', 'pinyin'];
+const es6modules = ['query-string', 'split-on-first', 'strict-uri-encode', 'array-move',  'debug', 'dom-serializer', 'pinyin'];
 
 const createCssLoaders = (isLess, isDev) => { // true isDec true
     const styleLoader = isDev ? 'style-loader' : MiniCssExtractPlugin.loader;
@@ -245,6 +245,8 @@ module.exports = (env, argv) => {
                 utils: path.resolve(__dirname, 'src/utils/'),
                 actions: path.resolve(__dirname, 'src/actions/'),
                 reducers: path.resolve(__dirname, 'src/reducers/'),
+                hooks: path.resolve(__dirname, 'src/hooks/'),
+
             },
         },
 
