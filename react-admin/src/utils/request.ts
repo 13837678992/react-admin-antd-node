@@ -76,6 +76,8 @@ export type FetchResult = Promise<{ err: Error | null; data: any }>;
  * @return {Promise<{ data: any, err: Error }>}           An object containing either "data" or "err"
  */
 export default function request(_url: string, options?: any): FetchResult {
+    const token = localStorage.getItem('token');
+    options.headers['Authorization'] = `Bearer ${token}`;
     const url = addTimestamp(_url );
     if (options.method === 'POST' || options.method === 'PUT' || options.method === 'GET') {
         if (!(options.body instanceof FormData)) {
