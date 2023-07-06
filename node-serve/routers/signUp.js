@@ -31,6 +31,7 @@ router.post('/signUp', async (ctx, next) => {
         data: []
       }
     } else {  // 否者没有注册
+      console.log('处理注册')
       let base64Data = user.avator.replace(/^data:image\/\w+;base64,/, "");
       let dataBuffer = new Buffer(base64Data, 'base64');
       let getName = Number(Math.random().toString().substr(3)).toString(36) + Date.now()
@@ -41,8 +42,8 @@ router.post('/signUp', async (ctx, next) => {
             console.log(err);
             return false
           }
-          console.log('头像上传成功') 
-      });  
+          console.log('头像上传成功')
+      });
 
       await userModel.insetUser([uuidV1(), user.userName, user.passWord, getName, new Date().getTime()]).then((res) => {
         console.log('注册成功')

@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
 import React, { useState,useEffect } from 'react';
 
-import {Form, Input, Button, Checkbox, Card} from 'antd';
+import {Form, Input, Button, Checkbox, Card, message} from 'antd';
 import {useSelector, useDispatch, connect} from 'react-redux';
-import { login } from '@/actions/authActions';
+import { login } from '@actions/authActions';
 import {useLocation, useNavigate} from "react-router-dom";
+import {post} from "@utils/request";
+// 用户登录
+
 const Login = ({login}) => {
     const isAuthenticated = useSelector(state => state?.auth?.isAuthenticated);
     const location = useLocation();
@@ -16,14 +19,24 @@ const Login = ({login}) => {
         }
     },[isAuthenticated])
     const onFinish = (values) => {
-        login(values.username,values.password);
+
         console.log(location,'location')
         const from = location?.state?.from || '/';
         console.log(from,'from')
-        setTimeout(()=>{
-
-        navigate(from)
-        },100)
+        post('/api/signIn', values).then(res => {
+            console.log(res,'res')
+            // 登录
+            if (res.state === 1) {
+                // 登录成功
+                localStorage.setItem('token', res.token)
+                login(values.username,values.password);
+                // 跳转到首页
+                navigate(from)
+            } else {
+                // 登录失败
+                message.error(res.msg)
+            }
+        })
     };
     const [form] = Form.useForm();
     const [, forceUpdate] = useState({}); // To disable submit button at the beginning.
@@ -43,7 +56,7 @@ const Login = ({login}) => {
                     autoComplete="off"
                 >
                     <Form.Item
-                        name="email"
+                        name="userName"
                         rules={[
                             {
                                 required: true,
@@ -54,7 +67,7 @@ const Login = ({login}) => {
                         <Input placeholder="Email" />
                     </Form.Item>
         <Form.Item
-            name="password"
+            name="passWord"
             rules={[
                 {
                     required: true,

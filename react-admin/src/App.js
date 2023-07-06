@@ -4,7 +4,7 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import routers from "@/routers";
+import routers from "@routers";
 import 'antd/dist/reset.css';
 function App ()  {
 

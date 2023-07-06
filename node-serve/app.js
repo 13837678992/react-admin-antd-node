@@ -16,18 +16,18 @@ app.use(server(
 )) // 设置静态文件
 
 app.use(cors({
-      origin: 'http://localhost:8080',
+      origin: 'http://localhost:8031',
       exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
       maxAge: 5,
       credentials: true,
-      allowMethods: ['GET', 'POST'],
+      allowMethods: ['GET', 'POST','DELETE','PUT'],
       allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
   })
 ); // 设置跨域
 
 
 app.use(bodyParser({
-  formLimit: '1mb'
+  formLimit: '5mb'
 })) // ctx body 中间件
 
 app.use(require('./routers/signUp.js').routes()) // 注册

@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {Link, Outlet, useLocation, useNavigate} from 'react-router-dom';
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Layout, Menu, Dropdown, Avatar, Space} from 'antd';
 import {
     UserOutlined,
     LogoutOutlined, DownOutlined, SmileOutlined,
 } from '@ant-design/icons';
-import {routeChildren} from '@/routers';
+import {routeChildren} from '@routers';
+import {logout} from '@actions/authActions';
+
+
+
 const { Header, Content, Footer, Sider } = Layout;
 
 
@@ -25,18 +29,24 @@ const items = generateMenuItems(routeChildren);
 function  LayoutIndex() {
     const [collapsed, setCollapsed] = useState(false);
     // 一个递归的函数，用于生成菜单项
-
+    const dispatch = useDispatch();
     const menu = (
         [ {
             key: '1',
             label: (
-                    '个人信息'
+                   <span> 个人信息</span>
             ),
             icon:<UserOutlined />
         },
             {
                 key: '2',
-                label: ('退出登录'),
+                label: (
+                    <span onClick={()=>{
+                        console.log('退出登录')
+                        dispatch(logout())
+
+                    }}>退出登录</span>
+                ),
                 icon: <LogoutOutlined />,
             }]
     );

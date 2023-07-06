@@ -11,15 +11,16 @@
     "strict": true, // 启用所有的严格类型检查选项
     "noUnusedLocals": true, // 在表达式里禁止未使用的局部变量
     "moduleResolution": "node", // 指定模块解析策略，node适用于Node.js/io.js模式
-    "baseUrl": "./", // 用于解析非相对模块名的基本目录
+    "baseUrl": "./src", // 用于解析非相对模块名的基本目录
     "paths": {
-      "@*": ["./src/*"], // 别名配置，@映射至./src，webpack.config.js中的alias应该与此对应
-      "components": ["./src/components/"],
-      "services": ["./src/services/"],
-      "utils": ["./src/utils/"],
-      "actions": ["./src/actions/"],
-      "reducers": ["./src/reducers/"],
-      "hooks": ["./src/hooks/"]
+      "@components/*": ["components/*"],
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"],
+      "@actions/*": ["actions/*"],
+      "@reducers/*": ["reducers/*"],
+      "@hooks/*": ["hooks/*"],
+      "@routers/*": ["routers/*"],
+      "@view/*": ["view/*"]
     }, // 一系列的导入重映射条目
     "allowSyntheticDefaultImports": true, // 允许从没有设置默认导出的模块中默认导入
     "esModuleInterop": true, // 启用CommonJS和ES模块之间的发射互操作性

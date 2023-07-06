@@ -1,9 +1,8 @@
 import { message } from 'antd';
 import fetch from 'isomorphic-fetch';
-import {useDispatch, useSelector} from "react-redux";
-import {logout} from "@actions/authActions";
-const dispatch = useDispatch()
-const isAuthenticated:Boolean = useSelector((state:any)  => state.auth.isAuthenticated);
+import store from "../store";
+
+const isAuthenticated:Boolean = store.getState().auth.isAuthenticated;
 export type IRequestMethod = 'GET' | 'PUT' | 'POST' | 'DELETE';
 export interface ICheckStatusProps {
     response: Response;
@@ -108,7 +107,7 @@ export default function request(_url: string, options?: any): FetchResult {
                 message.error('系统异常');
             }
             return ({
-                data,
+                ...data,
                 err: null,
             });
         })
@@ -119,7 +118,6 @@ export default function request(_url: string, options?: any): FetchResult {
                         if (isAuthenticated && err.response.status === 401) {
                             message.destroy();
                             message.error(`${data.msg || '登录已过期'},您需要重新登录,稍后将跳转至首页`);
-                            dispatch(logout());
                             setTimeout(() => {
                                 window.location.href = '/login';
                             }, 1000);

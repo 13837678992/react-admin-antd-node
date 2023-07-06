@@ -4,14 +4,14 @@ import {
     DesktopOutlined,
 
 } from '@ant-design/icons';
-import home from "@/routers/home";
+import home from "@routers/home";
 const routeChildren = [ ...home]
 const routes = [
     // 示例
     {
         title: '首页',
         path: '/',
-        component: lazy( () => import( `@/view/Layout` ) ),
+        component: lazy( () => import( `@view/Layout` ) ),
         icon: <DesktopOutlined />,
         children: routeChildren
 
@@ -20,13 +20,13 @@ const routes = [
     {
         title: '登录',
         path: '/login',
-        component: lazy( () => import( '@/view/Login' ) ),
+        component: lazy( () => import( '@view/Login' ) ),
         icon: <UserOutlined />,
         // powerDot: POWERDOT.liveVisit,
     },
     {
         path: '*',
-        component: lazy( () => import( `@/view/NotFound` ) ),
+        component: lazy( () => import( `@view/NotFound` ) ),
         // powerDot: POWERDOT.liveVisit,
 
     },

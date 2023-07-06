@@ -239,13 +239,14 @@ module.exports = (env, argv) => {
             symlinks: false,
             extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
             alias: {
-                '@': path.resolve(__dirname, 'src/'),
-                components: path.resolve(__dirname, 'src/components/'),
-                services: path.resolve(__dirname, 'src/services/'),
-                utils: path.resolve(__dirname, 'src/utils/'),
-                actions: path.resolve(__dirname, 'src/actions/'),
-                reducers: path.resolve(__dirname, 'src/reducers/'),
-                hooks: path.resolve(__dirname, 'src/hooks/'),
+                '@components': path.resolve(__dirname, 'src/components/'),
+                '@services': path.resolve(__dirname, 'src/services/'),
+                '@utils': path.resolve(__dirname, 'src/utils/'),
+                '@actions': path.resolve(__dirname, 'src/actions/'),
+                '@reducers': path.resolve(__dirname, 'src/reducers/'),
+                '@hooks': path.resolve(__dirname, 'src/hooks/'),
+                '@routers': path.resolve(__dirname, 'src/routers/'),
+                '@view': path.resolve(__dirname, 'src/view/'),
 
             },
         },
@@ -267,8 +268,9 @@ module.exports = (env, argv) => {
             },
             proxy: {
               '/api': {
-                target: 'http://tyucr7q.asia:8030',
+                target: 'http://localhost:8030',
                 changeOrigin: true,
+                  pathRewrite: { '^/api': '' },
               },
             },
             client: {
