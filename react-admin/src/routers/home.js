@@ -13,5 +13,17 @@ export  default [
         path:'/Live2D',
         component: lazy( () => import( `@view/Products/Live2D` ) ),
         icon: <PieChartOutlined />,
+    },
+    {
+        title: '超长列表',
+        path:'/langList',
+        component: lazy( () => import( `@view/Products/LangList` ) ),
+        icon: <PieChartOutlined />,
+    },
+    {
+        title: '虚拟列表',
+        path:'/virtualList',
+        component: lazy( () => import( `@view/Products/VirtualList` ) ),
+        icon: <PieChartOutlined />,
     }
 ]

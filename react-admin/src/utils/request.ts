@@ -66,7 +66,7 @@ function addTimestamp(url: string): string {
 }
 
 
-export type FetchResult = Promise<{ err: Error | null; data: any }>;
+export type FetchResult = Promise<Result>;
 
 /**
  * Requests a URL, returning a promise.
@@ -75,7 +75,7 @@ export type FetchResult = Promise<{ err: Error | null; data: any }>;
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {Promise<{ data: any, err: Error }>}           An object containing either "data" or "err"
  */
-export default function request(_url: string, options?: any): FetchResult {
+export default function request(_url: string, options?: any): FetchResult  {
     const token = localStorage.getItem('token');
     options.headers['Authorization'] = `Bearer ${token}`;
     const url = addTimestamp(_url );
@@ -103,17 +103,17 @@ export default function request(_url: string, options?: any): FetchResult {
             url: _url,
         }))
         .then(response => response.json())
-        .then(data => {
+        .then((data:any) :Result  => {
             const { code } = data;
             if (code === 'SYSTEM_ERROR') {
                 message.error('系统异常');
             }
             return ({
                 ...data,
-                err: null,
+                success: true,
             });
         })
-        .catch((err: any) => {
+        .catch((err: any):Result => {
             if (err && err.response) {
                 return err.response.json().then((data: any) => {
                     if (err.response.status === 401 || err.response.status === 403) {
@@ -123,23 +123,43 @@ export default function request(_url: string, options?: any): FetchResult {
                             setTimeout(() => {
                                 window.location.href = '/login';
                             }, 1000);
+                            return {
+                                ...err,
+                                success: false,
+                                message: data.msg || '登录已过期',
+                            }
+                        }
+                        return {
+                            ...err,
+                            success: false,
+
                         }
                     } else if (err.response.status === 200) {
-                        return null;
+                        return {
+                            ...err,
+                            success: false,
+                            message: data.msg || '解析错误',
+                        };
                     } else {
                         return {
-                            err: new Error(data.msg || '系统异常'),
+                            ...err,
+                            success: false,
+                            message: data.msg || '系统异常',
                         };
                     }
                 }).catch((e: Error) => {
                     // console.log(e);
                     return {
-                        err: new Error('系统异常'),
+                        ...err,
+                        success: false,
+                        message: '系统异常',
                     };
                 });
             } else {
                 return {
-                    err: new Error('系统异常'),
+                    code: "", data: undefined,
+                    success: false,
+                    message: '系统异常'
                 };
             }
         });
@@ -182,21 +202,14 @@ export function del(url: string) {
 }
 
 
-export type Result<T> =
+export type Result =
     {
-        success: true;
-        code: string;
-        data: T;
-        response: any; // 原始数据
+        success: boolean;
+        code?: string;
+        data?: any;
+        response?: any; // 原始数据
         message?: string;
-    }
-    | {
-    success: false;
-    err: Error;
-    message: string;
-    code: string;
-    data?: any;
-};
+    };
 
 /**
  * 自动解包多级 data （当 data 存在且仅存在 data 属性）
@@ -205,20 +218,19 @@ export type Result<T> =
 export function normalizeResult<T = any>(res: {
     err: Error | null;
     data: any;
-}): Result<T> {
+}): Result {
     if (!res) {
         return {
             success: false,
             data: null,
             message: '',
             code: '',
-            err: new Error(''),
+
         };
     }
     if (res.err) {
         return {
             success: false,
-            err: res.err,
             code: '',
             message: res.err.message,
         };
@@ -229,7 +241,6 @@ export function normalizeResult<T = any>(res: {
         if (!data) {
             return {
                 success: false,
-                err: new Error(''),
                 code: '',
                 message: '',
             };
@@ -255,7 +266,6 @@ export function normalizeResult<T = any>(res: {
         if (data.success !== true) {
             return {
                 success: false,
-                err: new Error(data.msg),
                 message: data.msg,
                 code: data.code,
                 data,
